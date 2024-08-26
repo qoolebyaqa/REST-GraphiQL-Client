@@ -1,12 +1,14 @@
 'use client';
 
 import { auth } from '@/firebase/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { FormEvent, useEffect, useState } from 'react';
+import { signInWithEmailAndPassword} from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
 
 export default function LogIn({changeForm}:{changeForm:() => void}) {
   const [user, setUser] = useState<{ login: string; password: string }>({ login: '', password: '' });
   const [infoMsg, setInfoMsg] = useState('');
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   async function logIn(e: FormEvent<HTMLFormElement>) {
@@ -15,6 +17,7 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
       if (user) {
         await signInWithEmailAndPassword(auth, user.login, user.password);
         setInfoMsg('You successfully entered to account')
+        setTimeout(() => {setInfoMsg(''); router.push('/main')});
       }
     } catch (err) {      
         setInfoMsg('Wrong account. Check your credentials')
