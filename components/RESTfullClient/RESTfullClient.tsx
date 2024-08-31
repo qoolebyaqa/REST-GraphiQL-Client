@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import base64 from 'base-64';
+import { useRouter } from 'next/navigation';
 
-export default function RESTfulClient({
-  params,
-}: {
-  params: { method: string; encodedUrl?: string; encodedBody?: string };
-}) {
+type Params = {
+  method: string;
+  encodedUrl?: string;
+  encodedBody?: string;
+};
+
+export default function RESTfullClient({ params }: { params: Params }) {
   const [method, setMethod] = useState<string>(params.method);
   const [url, setUrl] = useState<string>('');
   const [requestBody, setRequestBody] = useState<string>('');
@@ -19,6 +22,8 @@ export default function RESTfulClient({
   const [variables, setVariables] = useState<[string, string][]>([]);
   const [responseBody, setResponseBody] = useState<object | null>(null);
   const [httpCode, setHttpCode] = useState<number | null>(null);
+  const [hiddenVariables, setHiddenVariables] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (params.encodedUrl) {
@@ -41,10 +46,12 @@ export default function RESTfulClient({
   }, [params.encodedUrl, params.encodedBody]);
 
   const handleMethodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setMethod(e.target.value);
+    const newMethod = e.target.value;
+    setMethod(newMethod);
     setUrl('');
     setRequestBody('');
     setHeaders([]);
+    router.push(`/${newMethod}`);
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +113,10 @@ export default function RESTfulClient({
     setHeaders([]);
   };
 
+  const hideVariables = () => {
+    setHiddenVariables(!hiddenVariables);
+  };
+
   const replaceVariablesInRequestBody = (
     body: string,
     variables: [string, string][]
@@ -136,7 +147,7 @@ export default function RESTfulClient({
         )
         .join('&');
 
-      const apiUrl = `/api/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
+      const apiUrl = `/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
 
       console.log(apiUrl);
 
@@ -155,36 +166,38 @@ export default function RESTfulClient({
 
   return (
     <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Method:
-        </label>
-        <select
-          value={method}
-          onChange={handleMethodChange}
-          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        >
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="PATCH">PATCH</option>
-          <option value="DELETE">DELETE</option>
-          <option value="PUT">PUT</option>
-          <option value="HEAD">HEAD</option>
-          <option value="OPTIONS">OPTIONS</option>
-        </select>
-      </div>
+      <div className="flex space-x-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Method:
+          </label>
+          <select
+            value={method}
+            onChange={handleMethodChange}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          >
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+            <option value="PUT">PUT</option>
+            <option value="HEAD">HEAD</option>
+            <option value="OPTIONS">OPTIONS</option>
+          </select>
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          URL:
-        </label>
-        <input
-          type="text"
-          value={url}
-          onChange={handleUrlChange}
-          placeholder="Enter your URL"
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
-        />
+        <div className="mb-4 flex-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            URL:
+          </label>
+          <input
+            type="text"
+            value={url}
+            onChange={handleUrlChange}
+            placeholder="Enter your URL"
+            className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
+          />
+        </div>
       </div>
 
       <div className="mb-4">
@@ -194,7 +207,7 @@ export default function RESTfulClient({
         <div className="header-inputs flex space-x-4">
           <label
             htmlFor="header-key"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300  flex space-x-4"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
           >
             Key:
             <input
@@ -208,7 +221,7 @@ export default function RESTfulClient({
           </label>
           <label
             htmlFor="header-value"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300  flex space-x-4"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
           >
             Value:
             <input
@@ -224,16 +237,18 @@ export default function RESTfulClient({
 
         <button
           onClick={() => addHeaders(headerKey, headerValue)}
-          className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
         >
           Add Header
         </button>
+
         <button
           onClick={clearHeaders}
-          className="ml-2 mt-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+          className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
         >
           Clear Headers
         </button>
+
         <ul className="mt-2 list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
           {headers.map(([key, value], index) => (
             <li key={index}>{`${key}: ${value}`}</li>
@@ -241,102 +256,120 @@ export default function RESTfulClient({
         </ul>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Variables:
-        </label>
-        <div className="variables-input flex space-x-4">
-          <label
-            htmlFor="variable-key"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300  flex space-x-4"
-          >
-            Key:
-            <input
-              type="text"
-              name="variable-key"
-              id="variable-key"
-              value={variableKey}
-              onChange={handleChangeVariableKey}
-              className="mt-1 ml-2 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
-            />
+      {method !== 'GET' ? (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Variables:
           </label>
-          <label
-            htmlFor="variable-value"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300  flex space-x-4"
+          <div className="variable-inputs flex space-x-4">
+            <label
+              htmlFor="variable-key"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+            >
+              Key:
+              <input
+                type="text"
+                name="variable-key"
+                id="variable-key"
+                value={variableKey}
+                onChange={handleChangeVariableKey}
+                className="mt-1 ml-2 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
+              />
+            </label>
+            <label
+              htmlFor="variable-value"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+            >
+              Value:
+              <input
+                type="text"
+                name="variable-value"
+                id="variable-value"
+                value={variableValue}
+                onChange={handleChangeVariableValue}
+                className="mt-1 ml-2 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
+              />
+            </label>
+          </div>
+
+          <button
+            onClick={() => addVariables(variableKey, variableValue)}
+            className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
           >
-            Value:
-            <input
-              type="text"
-              name="variable-value"
-              id="variable-value"
-              value={variableValue}
-              onChange={handleChangeVariableValue}
-              className="mt-1 ml-2 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
-            />
-          </label>
+            Add Variable
+          </button>
+
+          <button
+            onClick={clearVariables}
+            className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            Clear Variables
+          </button>
+          <button
+            onClick={hideVariables}
+            className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            {hiddenVariables ? `Show` : `Hide`}
+          </button>
+
+          {!hiddenVariables && method !== 'GET' ? (
+            <ul className="mt-2 list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+              {variables.map(([key, value], index) => (
+                <li key={index}>{`${key}: ${value}`}</li>
+              ))}
+            </ul>
+          ) : (
+            <></>
+          )}
         </div>
+      ) : null}
 
-        <button
-          onClick={() => addVariables(variableKey, variableValue)}
-          className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-        >
-          Add Variable
-        </button>
-        <button
-          onClick={clearVariables}
-          className="ml-2 mt-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-        >
-          Clear Variables
-        </button>
-        <ul className="mt-2 list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
-          {variables.map(([key, value], index) => (
-            <li key={index}>{`${key}: ${value}`}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Request Body:
-        </label>
-        <textarea
-          value={requestBody}
-          onChange={handleBodyChange}
-          placeholder="Enter request body. Use {{variable}} to insert variables."
-          rows={10}
-          cols={50}
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
-        />
-        <button
-          onClick={prettifyJson}
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          Prettify JSON
-        </button>
-      </div>
+      {method !== 'GET' && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Request Body:
+          </label>
+          <textarea
+            value={requestBody}
+            onChange={handleBodyChange}
+            placeholder="Enter request body (JSON format)"
+            className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
+            rows={10}
+          ></textarea>
+          <button
+            onClick={prettifyJson}
+            className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            Prettify JSON
+          </button>
+        </div>
+      )}
 
       <button
         onClick={handleSubmit}
-        className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600"
+        className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
       >
         Send Request
       </button>
 
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          Response
-        </h2>
-        {httpCode && (
-          <p className="text-gray-700 dark:text-gray-300">
-            HTTP Status: {httpCode}
-          </p>
-        )}
-        {responseBody && (
-          <pre className="mt-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-md overflow-auto text-gray-800 dark:text-gray-200">
+      {httpCode && (
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            Response Code: {httpCode}
+          </h3>
+        </div>
+      )}
+
+      {responseBody && (
+        <div className="mt-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            Response Body:
+          </h3>
+          <pre className="mt-2 bg-gray-100 dark:bg-gray-700 p-4 rounded text-gray-900 dark:text-gray-100 overflow-scroll">
             {JSON.stringify(responseBody, null, 4)}
           </pre>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
