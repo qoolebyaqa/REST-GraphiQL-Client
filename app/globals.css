@@ -25,9 +25,63 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 60%;
+  padding: 0 30px;
+}
+.footer  li {
+  display: flex;
+  align-items: center;
+}
+.footer a {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 550px) { 
+  .footer {
+    padding: 0 2px;
+    font-size: 0.7rem;    
+  }
+  .footer ul {
+    gap: 10px;
+    margin-left: 20px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .footer {
+    margin-top: 0;
+  }
+}
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset:-1200;
+  }
+}
+
+@keyframes fade {
+  0%  {opacity:1}
+  20% {opacity:0}
+}
+
+
+.ekg__svg {
+  height: 250px;
+  margin:0 -1.7rem;
+}
+.ekg {
+  opacity:1;
+  stroke-dasharray: 600;
+  stroke-dashoffset :1200;
+  animation: dash 3.5s linear forwards infinite, fade 3.5s linear infinite;
 }

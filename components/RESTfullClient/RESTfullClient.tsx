@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import base64 from 'base-64';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '@/firebase/firebase';
+import Loader from '../Loader';
 
 type Params = {
   method: string;
@@ -23,9 +26,24 @@ export default function RESTfullClient({ params }: { params: Params }) {
   const [responseBody, setResponseBody] = useState<object | null>(null);
   const [httpCode, setHttpCode] = useState<number | null>(null);
   const [hiddenVariables, setHiddenVariables] = useState(false);
-  const router = useRouter();
+  const router = useRouter(); 
+  
+  const [authState, setAuthState] = useState<User | null>(null);  
+  const [loadingState, setLoadingState] = useState(true);
+
+  async function checkUser() {   
+    setLoadingState(true)
+    onAuthStateChanged(auth, (data: User | null) => {
+      setAuthState(data);
+      if(!data) {
+        router.push('/')
+      }
+    })
+    setLoadingState(false);
+  }
 
   useEffect(() => {
+    checkUser()
     if (params.encodedUrl) {
       try {
         const decodedUrl = base64.decode(params.encodedUrl);
@@ -165,6 +183,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
   };
 
   return (
+    <>{loadingState ? <Loader /> : 
     <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="flex space-x-4">
         <div className="mb-4">
@@ -207,7 +226,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
         <div className="header-inputs flex space-x-4">
           <label
             htmlFor="header-key"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
           >
             Key:
             <input
@@ -221,7 +240,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
           </label>
           <label
             htmlFor="header-value"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
           >
             Value:
             <input
@@ -264,7 +283,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
           <div className="variable-inputs flex space-x-4">
             <label
               htmlFor="variable-key"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+              className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
             >
               Key:
               <input
@@ -278,7 +297,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
             </label>
             <label
               htmlFor="variable-value"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
+              className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
             >
               Value:
               <input
@@ -370,6 +389,6 @@ export default function RESTfullClient({ params }: { params: Params }) {
           </pre>
         </div>
       )}
-    </div>
+    </div>}</>
   );
 }
