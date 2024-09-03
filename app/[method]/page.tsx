@@ -11,11 +11,8 @@ export default function RESTfullPage() {
     typeof params.encodedUrl === 'string' ? params.encodedUrl : '';
   const encodedBody =
     typeof params.encodedBody === 'string' ? params.encodedBody : '';
-
+  console.log(method)
   return (
-    <>
-      <h1>RESTful Client</h1>
-      <RESTfullClient params={{ method, encodedUrl, encodedBody }} />
-    </>
+    <RESTfullClient params={{ method, encodedUrl, encodedBody }} />
   );
 }

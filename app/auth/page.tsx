@@ -1,10 +1,10 @@
-import SignIn from '@/components/SignIn';
-import Link from 'next/link';
+import SignIn from '@/components/Auth/SignIn';
 
 export default function Auth() {
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Authorization</h1>
+    <main className="flex flex-col items-center justify-between p-4 mb-20">
+      <h2>Authorization</h2>
       <SignIn />
     </main>
   );

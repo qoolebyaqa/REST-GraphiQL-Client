@@ -1,15 +1,27 @@
 'use client';
 
 import { auth } from '@/firebase/firebase';
-import { signInWithEmailAndPassword} from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, User} from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 export default function LogIn({changeForm}:{changeForm:() => void}) {
   const [user, setUser] = useState<{ login: string; password: string }>({ login: '', password: '' });
   const [infoMsg, setInfoMsg] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [authState, setAuthState] = useState<User | null>(null);  
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  async function checkUser() {    
+    setLoading(true)
+    onAuthStateChanged(auth, (data: User | null) => {
+      setAuthState(data);
+    })
+    setLoading(false)
+  }
 
   async function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,11 +29,14 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
       if (user) {
         await signInWithEmailAndPassword(auth, user.login, user.password);
         setInfoMsg('You successfully entered to account')
-        setTimeout(() => {setInfoMsg(''); router.push('/main')});
+        setTimeout(() => {setInfoMsg(''); router.push('/restfull')});
       }
     } catch (err) {      
         setInfoMsg('Wrong account. Check your credentials')
     }
+  }
+  if(authState) {
+    router.push('/restfull')
   }
   return (
     <form
@@ -56,10 +71,11 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-        <button type="button" onClick={changeForm}>Need to register?</button>
+        <button type="button" onClick={changeForm} disabled={loading}>Need to register?</button>
         <button
           type="submit"
           className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
+          disabled={loading}
         >
           Log in
         </button>
