@@ -56,10 +56,16 @@ export default function RESTfullClient({ params }: { params: Params }) {
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.target.value);
+    const encodedUrl = base64.encode(url);
+    router.push(`/${method}/${encodedUrl}`);
   };
 
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newBody = e.target.value;
     setRequestBody(e.target.value);
+    const encodedBody = base64.encode(newBody);
+    const encodedUrl = base64.encode(url);
+    router.replace(`/${method}/${encodedUrl}/${encodedBody}`);
   };
 
   const prettifyJson = () => {
