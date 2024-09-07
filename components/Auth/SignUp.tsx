@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 
-export default function LogIn({ changeForm }: { changeForm: () => void }) {
+export default function SignUp() {
   const [user, setUser] = useState<{ login: string; password: string }>({
     login: '',
     password: '',
@@ -85,7 +85,7 @@ export default function LogIn({ changeForm }: { changeForm: () => void }) {
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-        <button type="button" onClick={changeForm} disabled={loading}>
+        <button type="button" onClick={() => router.push('/auth')} disabled={loading}>
           Need to register?
         </button>
         <button

@@ -41,6 +41,7 @@ body {
   align-items: center;
 }
 
+
 @media screen and (max-width: 550px) { 
   .footer {
     padding: 0 2px;

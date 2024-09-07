@@ -12,10 +12,13 @@ export default function RootLayout({
         <nav>
           <ul className="flex justify-around gap-10">
             <li>
-              <Link href="/GET">Go to Rest Client</Link>
+              <Link href='/' className='hover:text-cyan-600 transition-all duration-300'>Go to Main</Link>
             </li>
             <li>
-              <Link href="/GRAPHQL">Go to GraphiQL Client</Link>
+              <Link href="/GET" className='hover:text-cyan-600 transition-all duration-300'>Go to Rest Client</Link>
+            </li>
+            <li>
+              <Link href="/GRAPHQL" className='hover:text-cyan-600 transition-all duration-300'>Go to GraphiQL Client</Link>
             </li>
           </ul>
         </nav>

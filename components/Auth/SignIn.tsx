@@ -3,19 +3,32 @@
 import { auth } from '@/firebase/firebase';
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signOut,
+  User,
 } from 'firebase/auth';
 import { FormEvent, useEffect, useState } from 'react';
-import LogIn from './LogIn';
+import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
+  const router = useRouter();
+  const [authState, setAuthState] = useState<User | null>(null);
   const [user, setUser] = useState<{ login: string; password: string }>({
     login: '',
     password: '',
   });
-  const [changeForm, setChangeForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  async function checkUser() {
+    setLoading(true);
+    onAuthStateChanged(auth, (data: User | null) => {
+      setAuthState(data);
+    });
+    setLoading(false);
+  }
   async function registerUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -23,8 +36,7 @@ export default function SignIn() {
         setLoading(true)
         await createUserWithEmailAndPassword(auth, user.login, user.password);
         await signOut(auth);
-        const createdUser = auth.currentUser;
-        setChangeForm(false)
+        router.push('/auth/signup')
       }
     } catch (err) {
       console.log('Problem with firebase');
@@ -32,9 +44,11 @@ export default function SignIn() {
       setLoading(false)
     }
   }
+  if (authState) {
+    router.push('/GET');
+  }
   return (
     <>
-      {changeForm ? (
         <form
           className="flex flex-col mt-10 sm:w-1/2 xl:w-1/3 w-11/12 m-auto gap-4 text-teal-800 bg-white md:p-12 p-5 rounded-lg"
           onSubmit={registerUser}
@@ -70,7 +84,7 @@ export default function SignIn() {
             />
           </div>
           <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-            <button type="button" onClick={() => setChangeForm(false)} disabled={loading}>
+            <button type="button" onClick={() => router.push('/auth/signup')} disabled={loading}>
               Already have account?
             </button>
             <button
@@ -82,9 +96,6 @@ export default function SignIn() {
             </button>
           </div>
         </form>
-      ) : (
-        <LogIn changeForm={() => setChangeForm(true)} />
-      )}
     </>
   );
 }
