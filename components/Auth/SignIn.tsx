@@ -24,7 +24,6 @@ export default function SignIn() {
   useEffect(() => {
     checkUser();
   }, []);
-  console.log('check')
   async function checkUser() {
     if(!authState) {
       setLoading(true);

@@ -33,7 +33,6 @@ export default function SignUp() {
       router.push('/GET');
     }
   }
-  console.log('check')
 
   async function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +48,9 @@ export default function SignUp() {
     } catch (err) {
       setInfoMsg('Wrong account. Check your credentials');
     }
+  }
+  if(loading) {
+    return <p>Loading...</p>
   }
   return (
     <form
