@@ -1,26 +1,33 @@
 'use client';
 
 import { auth } from '@/firebase/firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, User} from 'firebase/auth';
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  User,
+} from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 
-export default function LogIn({changeForm}:{changeForm:() => void}) {
-  const [user, setUser] = useState<{ login: string; password: string }>({ login: '', password: '' });
+export default function LogIn({ changeForm }: { changeForm: () => void }) {
+  const [user, setUser] = useState<{ login: string; password: string }>({
+    login: '',
+    password: '',
+  });
   const [infoMsg, setInfoMsg] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [authState, setAuthState] = useState<User | null>(null);  
+  const [authState, setAuthState] = useState<User | null>(null);
   useEffect(() => {
-    checkUser()
-  }, [])
+    checkUser();
+  }, []);
 
-  async function checkUser() {    
-    setLoading(true)
+  async function checkUser() {
+    setLoading(true);
     onAuthStateChanged(auth, (data: User | null) => {
       setAuthState(data);
-    })
-    setLoading(false)
+    });
+    setLoading(false);
   }
 
   async function logIn(e: FormEvent<HTMLFormElement>) {
@@ -28,15 +35,18 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
     try {
       if (user) {
         await signInWithEmailAndPassword(auth, user.login, user.password);
-        setInfoMsg('You successfully entered to account')
-        setTimeout(() => {setInfoMsg(''); router.push('/restfull')});
+        setInfoMsg('You successfully entered to account');
+        setTimeout(() => {
+          setInfoMsg('');
+          router.push('/GET');
+        });
       }
-    } catch (err) {      
-        setInfoMsg('Wrong account. Check your credentials')
+    } catch (err) {
+      setInfoMsg('Wrong account. Check your credentials');
     }
   }
-  if(authState) {
-    router.push('/restfull')
+  if (authState) {
+    router.push('/GET');
   }
   return (
     <form
@@ -46,7 +56,7 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
       <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
         Log in to Playground
       </h2>
-      {infoMsg && <p className='text-2xl text-amber-400'>{infoMsg}</p>}
+      {infoMsg && <p className="text-2xl text-amber-400">{infoMsg}</p>}
       <p className="text-sm md:text-base">Enter to your account</p>
       <div className="flex flex-col">
         <label htmlFor="login">Username</label>
@@ -55,7 +65,9 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
           name="login"
           id="login"
           className="text-slate-900 border-2 border-black"
-          onChange={(e) => {setUser({ ...user, login: e.target.value })}}
+          onChange={(e) => {
+            setUser({ ...user, login: e.target.value });
+          }}
           value={user.login}
         />
       </div>
@@ -66,12 +78,16 @@ export default function LogIn({changeForm}:{changeForm:() => void}) {
           name="password"
           id="password"
           className="text-slate-900 border-2 border-black"
-          onChange={(e) => {setUser({ ...user, password: e.target.value })}}
+          onChange={(e) => {
+            setUser({ ...user, password: e.target.value });
+          }}
           value={user.password}
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-        <button type="button" onClick={changeForm} disabled={loading}>Need to register?</button>
+        <button type="button" onClick={changeForm} disabled={loading}>
+          Need to register?
+        </button>
         <button
           type="submit"
           className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
