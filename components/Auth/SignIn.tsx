@@ -3,47 +3,81 @@
 import { auth } from '@/firebase/firebase';
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signOut,
+  User,
 } from 'firebase/auth';
 import { FormEvent, useEffect, useState } from 'react';
-import LogIn from './LogIn';
+import { useRouter } from 'next/navigation';
+import { formSchema } from '@/utils/Schema';
+import { ValidationError } from 'yup';
 
 export default function SignIn() {
+  const router = useRouter();
+  const [authState, setAuthState] = useState<User | null>(null);
   const [user, setUser] = useState<{ login: string; password: string }>({
     login: '',
     password: '',
   });
-  const [changeForm, setChangeForm] = useState(false);
+  const [infoMsg, setInfoMsg] = useState<{[key:string]: string}>({});
   const [loading, setLoading] = useState(false);
-  
+  useEffect(() => {
+    checkUser();
+  }, []);
+  async function checkUser() {
+    if(!authState) {
+      setLoading(true);
+      onAuthStateChanged(auth, (data: User | null) => {
+        setAuthState(data);
+      });
+      setLoading(false); 
+    } else {
+      router.push('/GET');
+    }
+  }
   async function registerUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       if (user.login !=='' && user.password !== '') {
-        setLoading(true)
-        await createUserWithEmailAndPassword(auth, user.login, user.password);
-        await signOut(auth);
-        const createdUser = auth.currentUser;
-        setChangeForm(false)
+        const validForm = await formSchema.isValid(user);
+        if(validForm) {
+          setLoading(true)
+          await createUserWithEmailAndPassword(auth, user.login, user.password);
+          await signOut(auth);
+          router.push('/auth/signup')
+        } else {
+          await formSchema.validate(user, { abortEarly: false });
+        }
       }
     } catch (err) {
-      console.log('Problem with firebase');
+      if (err instanceof ValidationError) {
+        const newErrors: { [key: string]: string } = {};
+        err.inner.forEach((err) => {
+          if (err.path) {
+            newErrors[err.path] = err.message;
+          }
+        });
+        setInfoMsg(newErrors);
+      } else {        
+        setInfoMsg({login: 'Login has been already exist'})
+        console.log(err);
+      }
     } finally {
       setLoading(false)
     }
   }
   return (
     <>
-      {changeForm ? (
         <form
           className="flex flex-col mt-10 sm:w-1/2 xl:w-1/3 w-11/12 m-auto gap-4 text-teal-800 bg-white md:p-12 p-5 rounded-lg"
           onSubmit={registerUser}
         >
           <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
-            Sign in to Playground
+            Sign up to Playground
           </h2>
           <p className="text-sm md:text-base">Register your account</p>
           <div className="flex flex-col">
+            {infoMsg.login && <p className="text-2xl text-amber-400 error">{infoMsg.login}</p>}
             <label htmlFor="signin">Username</label>
             <input
               type="text"
@@ -57,6 +91,7 @@ export default function SignIn() {
             />
           </div>
           <div className="flex flex-col">
+            {infoMsg.password && <p className="text-2xl text-amber-400 error">{infoMsg.password}</p>}
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -70,21 +105,18 @@ export default function SignIn() {
             />
           </div>
           <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-            <button type="button" onClick={() => setChangeForm(false)} disabled={loading}>
+            <button type="button" onClick={() => router.push('/auth/signup')} disabled={loading}>
               Already have account?
             </button>
             <button
               type="submit"
               className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
-              disabled={loading}
+              disabled={loading || (user.login ==='' || user.password === '')}
             >
-              Sign in
+              Sign Up
             </button>
           </div>
         </form>
-      ) : (
-        <LogIn changeForm={() => setChangeForm(true)} />
-      )}
     </>
   );
 }

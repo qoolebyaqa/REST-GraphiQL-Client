@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import base64 from 'base-64';
 
+export async function GRAPHQL(
+  request: NextRequest,
+  { params }: { params: { method: string; url: string; body?: string } }
+) {
+  return handleRequest(params, 'POST', request);
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { method: string; url: string; body?: string } }
@@ -40,18 +47,46 @@ async function handleRequest(
     });
   }
 
-  const fetchOptions: RequestInit = {
-    method,
-    headers,
-    body: decodedBody,
-  };
+  const isGraphQL =
+    headers['Content-Type'] === 'application/graphql' ||
+    decodedUrl.includes('/graphql');
+
+  let fetchOptions: RequestInit;
+
+  if (isGraphQL) {
+    fetchOptions = {
+      method,
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: decodedBody,
+      }),
+    };
+  } else {
+    fetchOptions = {
+      method,
+      headers,
+      body: decodedBody,
+    };
+  }
 
   try {
     const response = await fetch(decodedUrl, fetchOptions);
-    const data = await response.json();
+
+    const contentType = response.headers.get('content-type') || '';
+    let data;
+
+    if (contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
+    console.error('Error in fetching:', error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
