@@ -20,15 +20,20 @@ export default function SignUp() {
   const [authState, setAuthState] = useState<User | null>(null);
   useEffect(() => {
     checkUser();
-  }, []);
+  }, [authState]);
 
   async function checkUser() {
-    setLoading(true);
-    onAuthStateChanged(auth, (data: User | null) => {
-      setAuthState(data);
-    });
-    setLoading(false);
+    if(!authState) {
+      setLoading(true);
+      onAuthStateChanged(auth, (data: User | null) => {
+        setAuthState(data);
+      });
+      setLoading(false); 
+    } else {
+      router.push('/GET');
+    }
   }
+  console.log('check')
 
   async function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,9 +50,6 @@ export default function SignUp() {
       setInfoMsg('Wrong account. Check your credentials');
     }
   }
-  if (authState) {
-    router.push('/GET');
-  }
   return (
     <form
       className="flex flex-col mt-10 sm:w-1/2 xl:w-1/3 w-11/12 m-auto gap-4 text-teal-800 bg-white md:p-12 p-5 rounded-lg"
@@ -56,7 +58,7 @@ export default function SignUp() {
       <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
         Log in to Playground
       </h2>
-      {infoMsg && <p className="text-2xl text-amber-400">{infoMsg}</p>}
+      {infoMsg && <p className="text-2xl text-amber-400 error">{infoMsg}</p>}
       <p className="text-sm md:text-base">Enter to your account</p>
       <div className="flex flex-col">
         <label htmlFor="login">Username</label>
@@ -91,7 +93,7 @@ export default function SignUp() {
         <button
           type="submit"
           className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
-          disabled={loading}
+          disabled={loading || (user.login ==='' || user.password === '')}
         >
           Log in
         </button>

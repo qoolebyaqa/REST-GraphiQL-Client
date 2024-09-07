@@ -9,6 +9,8 @@ import {
 } from 'firebase/auth';
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formSchema } from '@/utils/Schema';
+import { ValidationError } from 'yup';
 
 export default function SignIn() {
   const router = useRouter();
@@ -17,35 +19,53 @@ export default function SignIn() {
     login: '',
     password: '',
   });
+  const [infoMsg, setInfoMsg] = useState<{[key:string]: string}>({});
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     checkUser();
   }, []);
-
+  console.log('check')
   async function checkUser() {
-    setLoading(true);
-    onAuthStateChanged(auth, (data: User | null) => {
-      setAuthState(data);
-    });
-    setLoading(false);
+    if(!authState) {
+      setLoading(true);
+      onAuthStateChanged(auth, (data: User | null) => {
+        setAuthState(data);
+      });
+      setLoading(false); 
+    } else {
+      router.push('/GET');
+    }
   }
   async function registerUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       if (user.login !=='' && user.password !== '') {
-        setLoading(true)
-        await createUserWithEmailAndPassword(auth, user.login, user.password);
-        await signOut(auth);
-        router.push('/auth/signup')
+        const validForm = await formSchema.isValid(user);
+        if(validForm) {
+          setLoading(true)
+          await createUserWithEmailAndPassword(auth, user.login, user.password);
+          await signOut(auth);
+          router.push('/auth/signup')
+        } else {
+          await formSchema.validate(user, { abortEarly: false });
+        }
       }
     } catch (err) {
-      console.log('Problem with firebase');
+      if (err instanceof ValidationError) {
+        const newErrors: { [key: string]: string } = {};
+        err.inner.forEach((err) => {
+          if (err.path) {
+            newErrors[err.path] = err.message;
+          }
+        });
+        setInfoMsg(newErrors);
+      } else {        
+        setInfoMsg({login: 'Login has been already exist'})
+        console.log(err);
+      }
     } finally {
       setLoading(false)
     }
-  }
-  if (authState) {
-    router.push('/GET');
   }
   return (
     <>
@@ -54,10 +74,11 @@ export default function SignIn() {
           onSubmit={registerUser}
         >
           <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
-            Sign in to Playground
+            Sign up to Playground
           </h2>
           <p className="text-sm md:text-base">Register your account</p>
           <div className="flex flex-col">
+            {infoMsg.login && <p className="text-2xl text-amber-400 error">{infoMsg.login}</p>}
             <label htmlFor="signin">Username</label>
             <input
               type="text"
@@ -71,6 +92,7 @@ export default function SignIn() {
             />
           </div>
           <div className="flex flex-col">
+            {infoMsg.password && <p className="text-2xl text-amber-400 error">{infoMsg.password}</p>}
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -90,9 +112,9 @@ export default function SignIn() {
             <button
               type="submit"
               className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
-              disabled={loading}
+              disabled={loading || (user.login ==='' || user.password === '')}
             >
-              Sign in
+              Sign Up
             </button>
           </div>
         </form>

@@ -41,6 +41,19 @@ body {
   align-items: center;
 }
 
+.error {
+  font-size: 12px;
+  animation: ErrorReveal 0.4s ease-in-out;
+  transition: 0.4s;
+}
+
+
+@keyframes ErrorReveal {
+  0% {transform: translateY(-30px);}  
+  50% {transform: translateY(30px);}  
+  100% {transform: translateY(0);}
+}
+
 
 @media screen and (max-width: 550px) { 
   .footer {
