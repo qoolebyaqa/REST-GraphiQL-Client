@@ -43,6 +43,7 @@
     "jsdom": "^24.1.0",
     "mini-css-extract-plugin": "^2.9.0",
     "msw": "^2.3.1",
+    "next-intl": "^3.19.1",
     "next-router-mock": "^0.9.13",
     "postcss": "^8",
     "prettier": "^3.3.2",

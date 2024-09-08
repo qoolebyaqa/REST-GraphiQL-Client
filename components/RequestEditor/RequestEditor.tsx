@@ -1,6 +1,7 @@
 import * as prettier from 'prettier/standalone';
 import * as parserGraphql from 'prettier/parser-graphql';
 import { updateUrl } from '@/utils/updateUrl';
+import { useTranslations } from 'next-intl';
 
 type RequestEditorProps = {
   method: string;
@@ -19,6 +20,7 @@ const RequestEditor = ({
   setRequestBody,
   isGraphQL = false,
 }: RequestEditorProps) => {
+  const t = useTranslations('Rest');
   const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newRequestBody = e.target.value;
     setRequestBody(newRequestBody);
@@ -51,17 +53,14 @@ const RequestEditor = ({
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Request Body:
+        {t('reqBody')}
       </label>
       <textarea
         value={requestBody}
         onChange={handleBodyChange}
         onBlur={focusOutEvent}
-        placeholder={
-          isGraphQL
-            ? 'Enter request body (GraphQL format)'
-            : 'Enter request body (JSON format)'
-        }
+        placeholder={`${t('bodyph')}${isGraphQL ? '(GraphQL)' : '(JSON)'}
+        `}
         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
         rows={10}
       ></textarea>
@@ -69,7 +68,7 @@ const RequestEditor = ({
         onClick={prettifyRequestBody}
         className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
       >
-        Prettify {isGraphQL ? 'GraphQL' : 'JSON'}
+        {t('prettify')} {isGraphQL ? 'GraphQL' : 'JSON'}
       </button>
     </div>
   );

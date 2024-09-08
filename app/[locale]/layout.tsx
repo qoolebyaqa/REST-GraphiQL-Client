@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import './globals.css';
 import Footer from '@/components/Footer/Footer';
 
@@ -10,13 +12,17 @@ export const metadata: Metadata = {
   description: 'RSSchool study project',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: { locale }
 }: Readonly<{
   children: React.ReactNode;
+  params: {locale: string}
 }>) {
+  const messages = await getMessages();
   return (
-    <html lang="en">
+    <html lang={locale}>
+      <NextIntlClientProvider messages={messages}>
       <body className={`${inter.className} mt-4`}>
         <header className='flex gap-6 items-center'>
         <svg
@@ -42,11 +48,12 @@ export default function RootLayout({
           />
         </svg> 
         <h2 className="text-center text-2xl pr-6 pb-[35px]">
-          Rest-Graphiql-Client playground
+          {locale === 'en' ? 'Rest-Graphiql-Client playground' : 'Платформа - Rest-Graphiql-Client'}
         </h2></header>
         {children}
         <Footer />
       </body>
+      </NextIntlClientProvider>
     </html>
   );
 }

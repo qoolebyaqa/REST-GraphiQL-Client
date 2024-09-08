@@ -1,0 +1,67 @@
+{
+  "Main": {
+    "playground": "Rest-Graphiql-Client playground",
+    "courseDescription": "The Course will help Anybody to get required knowledge for smooth start of Front-end developer way. The main thing is to stay confident and be diligent. Everyone can study at RS School, regardless of age, professional employment, or place of residence. However, base knowledge are required before the program begins.",
+    "startBTN": "Get Started",
+    "Petr": "Petr - The most stubborn and hardworker",
+    "Artur": "Artur - always partially involved",
+    "Dmitry": "Dmitry - process controller"
+  },
+  "Footer": {
+    "Artur": "Ten Artur",
+    "ArturLocation": "Tashkent, Uzbekistan",
+    "Petr": "Petr Markin",
+    "PetrLocation": "Sochi, Russian Federation",
+    "Dmitry": "Dmitry Martynovich",
+    "DmitryLocation": "Batumi, Georgia"
+  },
+  "Auth": {
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "welcome": "Welcome!",
+    "loading": "Loading...",
+    "LogInTitle": "Log in to Playground",
+    "LoginHint": "Enter to your account",
+    "NameLabel": "Username",
+    "PassLabel": "Password",
+    "GoToSignUp": "Need to Register?",
+    "LoginSubmit": "Log in",
+    "SignupTitle": "Sign up to Playground",
+    "SignupHint": "Register your account",
+    "GoToSignIn": "Already have account?",
+    "SignupSubmit": "Sign Up",
+    "Logout": "Log out",
+    "gotoMain": "Main page"
+  },
+  "Nav": {
+    "gotoMain": "Main page",
+    "gotoRest": "Rest client",
+    "gotoGraph": "Graphiql client"
+  },
+  "Rest": {
+    "method": "Method:",
+    "urlPH": "Enter your url",
+    "headers": "Headers:",
+    "key": "Key:",
+    "value": "Value:",
+    "addHeader": "Add Header",
+    "clearHeaders": "Clear Headers",
+    "sendReq": "Send Request",
+    "SDLph": "Enter SDL URL (or leave it default)",
+    "fetchSchema": "Fetch Schema",
+    "vars": "Variables:",
+    "addVar": "Add Variable",
+    "clearVar": "Clear Variables",
+    "hide": "Hide",
+    "show": "Show",
+    "reqBody": "Request Body:",
+    "bodyph": "Enter request body under format of ",
+    "prettify": "Prettify GraphQL",
+    "shemaG": "GraphQL Схема"
+  },
+  "404": {
+    "title": "Oh... it is 404!",
+    "message": "Sorry the requested route is not found.",
+    "gotoMain": "Return to Main"
+  }
+}

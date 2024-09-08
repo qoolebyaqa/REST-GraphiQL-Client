@@ -1,26 +1,28 @@
 import Link from 'next/link';
 import FooterItem from './FooterItem';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('Footer');
   return (
     <footer className="footer mx-auto">
       <FooterItem
-        name="Ten Artur"
+        name={t('Artur')}
         ghLink="https://github.com/qoolebyaqa"
         dsLink="https://discord.com/users/539409262355546122"
-        location="Tashkent, Uzbekistan"
+        location={t('ArturLocation')}
       />
       <FooterItem
-        name="Petr Markin"
+        name={t('Petr')}
         ghLink="https://github.com/PetrMarkin"
         dsLink="https://discordapp.com/users/557296404104478743"
-        location="Sochi, Russia"
+        location={t('PetrLocation')}
       />
       <FooterItem
-        name="Dmitry Martynovich"
+        name={t('Dmitry')}
         ghLink="https://github.com/dm-mrtnvch"
         dsLink="https://discord.com/users/819282393499566081"
-        location="Batumi, Georgia"
+        location={t('DmitryLocation')}
       />
       <div className="flex justify-end mt-2 items-center gap-4">
         <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg" width='40px' height='40px'>

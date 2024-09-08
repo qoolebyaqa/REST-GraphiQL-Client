@@ -13,6 +13,7 @@ import UrlInput from '../UrlInput/UrlInput';
 import { updateUrl } from '@/utils/updateUrl';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import { replaceVariablesInRequestBody } from '@/utils/replaceVaribles';
+import { useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
@@ -33,6 +34,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
 
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
+  const t = useTranslations('Rest')
 
   async function checkUser() {
     setLoadingState(true);
@@ -131,7 +133,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
           <div className="flex space-x-4">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Method:
+                {t('method')}
               </label>
               <select
                 value={method}
@@ -180,7 +182,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
             onClick={handleSubmit}
             className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
           >
-            Send Request
+            {t('sendReq')}
           </button>
 
           <ResponseSecion
