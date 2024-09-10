@@ -13,7 +13,7 @@ import UrlInput from '../UrlInput/UrlInput';
 import { updateUrl } from '@/utils/updateUrl';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import { replaceVariablesInRequestBody } from '@/utils/replaceVaribles';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
@@ -34,6 +34,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
 
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
+  const locale = useLocale();
   const t = useTranslations('Rest')
 
   async function checkUser() {
@@ -74,7 +75,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
     setUrl('');
     setRequestBody('');
     setHeaders([]);
-    updateUrl(newMethod, '', [], '');
+    updateUrl(`${locale}/${e.target.value}`, '', [], '');
   };
 
   const handleSubmit = async () => {
@@ -103,7 +104,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
         )
         .join('&');
 
-      const apiUrl = `/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParamsHeader ? `?${queryParamsHeader}` : ''}`;
+      const apiUrl = `/${locale}/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParamsHeader ? `?${queryParamsHeader}` : ''}`;
       window.history.replaceState(null, '', apiUrl);
 
       const response = await fetch(apiUrl, {
@@ -117,9 +118,9 @@ export default function RESTfullClient({ params }: { params: Params }) {
     } catch (error: unknown) {
       console.error('Error:', error);
       if (error instanceof Error) {
-        setErrorMessage(error.message || 'An unknown error occurred');
+        setErrorMessage(error.message || t('unknownERR'));
       } else {
-        setErrorMessage('An unknown error occurred');
+        setErrorMessage(t('unknownERR'));
       }
     }
   };

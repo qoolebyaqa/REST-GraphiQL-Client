@@ -56,8 +56,13 @@
     "show": "Show",
     "reqBody": "Request Body:",
     "bodyph": "Enter request body under format of ",
-    "prettify": "Prettify GraphQL",
-    "shemaG": "GraphQL Схема"
+    "prettify": "Prettify",
+    "shemaG": "GraphQL Схема",
+    "unknownERR": "An unknown error occurred",
+    "fail": "Failed to fetch schema",
+    "fetchingERR": "An error occurred while fetching the schema",
+    "resCode": "Response code: ",
+    "errCode": "Error: "
   },
   "404": {
     "title": "Oh... it is 404!",

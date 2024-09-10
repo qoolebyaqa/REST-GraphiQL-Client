@@ -1,16 +1,8 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import './globals.css';
 import Footer from '@/components/Footer/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'Rest-graphiql-client',
-  description: 'RSSchool study project',
-};
 
 export default async function RootLayout({
   children,
@@ -21,9 +13,7 @@ export default async function RootLayout({
 }>) {
   const messages = await getMessages();
   return (
-    <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
-      <body className={`${inter.className} mt-4`}>
         <header className='flex gap-6 items-center'>
         <svg
           version="1.1"
@@ -52,8 +42,6 @@ export default async function RootLayout({
         </h2></header>
         {children}
         <Footer />
-      </body>
       </NextIntlClientProvider>
-    </html>
   );
 }

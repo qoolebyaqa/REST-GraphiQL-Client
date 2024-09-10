@@ -40,6 +40,7 @@ export default function SignUp() {
   async function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      setLoading(true);
       if (user) {
         await signInWithEmailAndPassword(auth, user.login, user.password);
         setInfoMsg('You successfully entered to account');
@@ -50,6 +51,8 @@ export default function SignUp() {
       }
     } catch (err) {
       setInfoMsg('Wrong account. Check your credentials');
+    } finally {
+      setLoading(false);
     }
   }
   if(loading) {

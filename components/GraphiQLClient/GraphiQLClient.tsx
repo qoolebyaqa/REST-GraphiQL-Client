@@ -10,7 +10,7 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import VariablesEditor from '../VariablesEditor/VariablesEditor';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import UrlInput from '../UrlInput/UrlInput';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
@@ -32,6 +32,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
   const [schema, setSchema] = useState<object | null>(null);
 
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('Rest')
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
@@ -83,11 +84,11 @@ export default function GraphiQLClient({ params }: { params: Params }) {
         const clientSchema = buildClientSchema(data.data);
         setSchema(clientSchema);
       } else {
-        setErrorMessage('Failed to fetch schema');
+        setErrorMessage(t('fail'));
       }
     } catch (error) {
       console.error('Failed to fetch schema:', error);
-      setErrorMessage('An error occurred while fetching the schema');
+      setErrorMessage(t('fetchingERR'));
     }
   };
 
@@ -124,7 +125,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
         )
         .join('&');
 
-      const apiUrl = `/GRAPHQL/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
+      const apiUrl = `/${locale}/GRAPHQL/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
       window.history.replaceState(null, '', apiUrl);
 
       console.log('API URL:', apiUrl);
