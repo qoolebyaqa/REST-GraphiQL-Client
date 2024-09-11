@@ -59,8 +59,8 @@ const RequestEditor = ({
         onBlur={focusOutEvent}
         placeholder={
           isGraphQL
-            ? 'Enter request body (GraphQL format)'
-            : 'Enter request body (JSON format)'
+            ? 'Enter request body (GraphQL format). The syntax is {{var}} to use variables.'
+            : 'Enter request body (JSON format).The syntax is {{var}} to use variables.'
         }
         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
         rows={10}
