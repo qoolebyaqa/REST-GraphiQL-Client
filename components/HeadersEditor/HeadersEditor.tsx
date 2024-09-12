@@ -1,4 +1,5 @@
 import { updateUrl } from '@/utils/updateUrl';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 type HeadersEditorProps = {
@@ -18,7 +19,7 @@ const HeadersEditor = ({
 }: HeadersEditorProps) => {
   const [headerKey, setHeaderKey] = useState('');
   const [headerValue, setHeaderValue] = useState('');
-
+  const t = useTranslations('Rest');
   const handleChangeHeaderKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHeaderKey(e.target.value);
   };
@@ -45,14 +46,14 @@ const HeadersEditor = ({
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Headers:
+        {t('headers')}
       </label>
       <div className="header-inputs flex space-x-4">
         <label
           htmlFor="header-key"
           className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
         >
-          Key:
+          {t('key')}
           <input
             type="text"
             name="header-key"
@@ -66,7 +67,7 @@ const HeadersEditor = ({
           htmlFor="header-value"
           className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
         >
-          Value:
+          {t('value')}
           <input
             type="text"
             name="header-value"
@@ -82,14 +83,14 @@ const HeadersEditor = ({
         onClick={() => addHeaders(headerKey, headerValue)}
         className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
       >
-        Add Header
+        {t('addHeader')}
       </button>
 
       <button
         onClick={clearHeaders}
         className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
       >
-        Clear Headers
+        {t('clearHeaders')}
       </button>
 
       <ul className="mt-2 list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">

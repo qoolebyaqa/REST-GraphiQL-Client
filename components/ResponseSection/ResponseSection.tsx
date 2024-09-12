@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 
 interface ResponseProps {
@@ -11,12 +12,13 @@ const ResponseSecion: FC<ResponseProps> = ({
   errorMessage,
   responseBody,
 }) => {
+  const t = useTranslations('Rest');
   return (
     <>
       {httpCode && (
         <div className="mt-4">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            Response Code: {httpCode}
+            {t('resCode')} {httpCode}
           </h3>
         </div>
       )}
@@ -24,7 +26,7 @@ const ResponseSecion: FC<ResponseProps> = ({
       {errorMessage && (
         <div className="mt-4">
           <p className="text-sm font-medium text-red-500 dark:text-red-400">
-            Error: {errorMessage}
+            {t('errCode')} {errorMessage}
           </p>
         </div>
       )}

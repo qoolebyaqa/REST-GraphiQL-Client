@@ -1,12 +1,14 @@
 'use client';
 
 import { auth } from '@/firebase/firebase';
+import { Link } from '@/navigation';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   User,
 } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function SignUp() {
@@ -14,6 +16,7 @@ export default function SignUp() {
     login: '',
     password: '',
   });
+  const t = useTranslations('Auth');
   const [infoMsg, setInfoMsg] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -37,6 +40,7 @@ export default function SignUp() {
   async function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      setLoading(true);
       if (user) {
         await signInWithEmailAndPassword(auth, user.login, user.password);
         setInfoMsg('You successfully entered to account');
@@ -47,10 +51,12 @@ export default function SignUp() {
       }
     } catch (err) {
       setInfoMsg('Wrong account. Check your credentials');
+    } finally {
+      setLoading(false);
     }
   }
   if(loading) {
-    return <p>Loading...</p>
+    return <p>{t('loading')}</p>
   }
   return (
     <form
@@ -58,12 +64,12 @@ export default function SignUp() {
       onSubmit={logIn}
     >
       <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
-        Log in to Playground
+      {t('LogInTitle')}
       </h2>
       {infoMsg && <p className="text-2xl text-amber-400 error">{infoMsg}</p>}
-      <p className="text-sm md:text-base">Enter to your account</p>
+      <p className="text-sm md:text-base">{t('LoginHint')}</p>
       <div className="flex flex-col">
-        <label htmlFor="login">Username</label>
+        <label htmlFor="login">{t('NameLabel')}</label>
         <input
           type="text"
           name="login"
@@ -76,7 +82,7 @@ export default function SignUp() {
         />
       </div>
       <div className="flex flex-col">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{t('PassLabel')}</label>
         <input
           type="password"
           name="password"
@@ -89,15 +95,17 @@ export default function SignUp() {
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-        <button type="button" onClick={() => router.push('/auth')} disabled={loading}>
-          Need to register?
-        </button>
+        <Link href='/auth'>
+          <button type="button" disabled={loading}>
+            {t('GoToSignUp')}
+          </button>
+        </Link>
         <button
           type="submit"
           className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
           disabled={loading || (user.login ==='' || user.password === '')}
         >
-          Log in
+          {t('LoginSubmit')}
         </button>
       </div>
     </form>

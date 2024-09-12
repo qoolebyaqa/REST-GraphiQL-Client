@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 type VariablesEditorProps = {
@@ -11,7 +12,7 @@ const VariablesEditor = ({ variables, setVariables }: VariablesEditorProps) => {
   const [variableKey, setVariableKey] = useState('');
   const [variableValue, setVariableValue] = useState('');
   const [hiddenVariables, setHiddenVariables] = useState(false);
-
+  const t = useTranslations('Rest');
   const handleChangeVariableKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVariableKey(e.target.value);
   };
@@ -41,14 +42,14 @@ const VariablesEditor = ({ variables, setVariables }: VariablesEditorProps) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Variables:
+        {t('vars')}
       </label>
       <div className="variable-inputs flex space-x-4">
         <label
           htmlFor="variable-key"
           className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
         >
-          Key:
+          {t('key')}
           <input
             type="text"
             name="variable-key"
@@ -62,7 +63,7 @@ const VariablesEditor = ({ variables, setVariables }: VariablesEditorProps) => {
           htmlFor="variable-value"
           className="text-sm font-medium text-gray-700 dark:text-gray-300 flex space-x-4"
         >
-          Value:
+          {t('value')}
           <input
             type="text"
             name="variable-value"
@@ -77,19 +78,19 @@ const VariablesEditor = ({ variables, setVariables }: VariablesEditorProps) => {
         onClick={() => addVariables(variableKey, variableValue)}
         className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
       >
-        Add Variable
+        {t('addVar')}
       </button>
       <button
         onClick={clearVariables}
         className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
       >
-        Clear Variables
+        {t('clearVar')}
       </button>
       <button
         onClick={hideVariables}
         className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
       >
-        {hiddenVariables ? `Show` : `Hide`}
+        {hiddenVariables ? t('show') : t('hide')}
       </button>
       {!hiddenVariables && (
         <ul className="mt-2 list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
