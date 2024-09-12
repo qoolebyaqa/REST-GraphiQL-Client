@@ -9,7 +9,7 @@ interface IFooterItem {
 
 function FooterItem({ name, ghLink, dsLink, location }: IFooterItem) {
   return (
-    <div className='flex justify-between'>
+    <div className='flex justify-between font-mono'>
       <div className='flex'>
       <h4>{name}</h4>
       <ul className="flex gap-4 ml-4">

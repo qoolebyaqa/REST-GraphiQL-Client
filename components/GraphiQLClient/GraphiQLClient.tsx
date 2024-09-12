@@ -10,6 +10,7 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import VariablesEditor from '../VariablesEditor/VariablesEditor';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import UrlInput from '../UrlInput/UrlInput';
+import { useLocale, useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
@@ -31,7 +32,8 @@ export default function GraphiQLClient({ params }: { params: Params }) {
   const [schema, setSchema] = useState<object | null>(null);
 
   const router = useRouter();
-
+  const locale = useLocale();
+  const t = useTranslations('Rest')
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
 
@@ -82,11 +84,11 @@ export default function GraphiQLClient({ params }: { params: Params }) {
         const clientSchema = buildClientSchema(data.data);
         setSchema(clientSchema);
       } else {
-        setErrorMessage('Failed to fetch schema');
+        setErrorMessage(t('fail'));
       }
     } catch (error) {
       console.error('Failed to fetch schema:', error);
-      setErrorMessage('An error occurred while fetching the schema');
+      setErrorMessage(t('fetchingERR'));
     }
   };
 
@@ -123,7 +125,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
         )
         .join('&');
 
-      const apiUrl = `/GRAPHQL/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
+      const apiUrl = `/${locale}/GRAPHQL/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
       window.history.replaceState(null, '', apiUrl);
 
       console.log('API URL:', apiUrl);
@@ -164,7 +166,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
                   type="text"
                   value={sdlUrl}
                   onChange={handleSdlUrlChange}
-                  placeholder="Enter SDL URL (or leave default)"
+                  placeholder={t('SDLph')}
                   className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2"
                 />
               </div>
@@ -173,7 +175,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
                 className="mb-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
                 onClick={fetchShema}
               >
-                Fetch Schema
+                {t('fetchSchema')}
               </button>
 
               <HeadersEditor
@@ -202,14 +204,14 @@ export default function GraphiQLClient({ params }: { params: Params }) {
                 onClick={handleSubmit}
                 className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
               >
-                Send Request
+                {t('sendReq')}
               </button>
             </div>
 
             {schema && (
               <div className="mt-8 max-w-[50%]">
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                  GraphQL Schema
+                  {t('shemaG')}
                 </h2>
                 <pre className="mt-2 bg-gray-100 dark:bg-gray-700 p-4 rounded text-gray-900 dark:text-gray-100 overflow-scroll">
                   {JSON.stringify(schema, null, 4)}
