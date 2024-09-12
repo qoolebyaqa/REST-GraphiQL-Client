@@ -148,7 +148,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
       {loadingState ? (
         <Loader />
       ) : (
-        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg pt-32">
           <div className="flex flex-row justify-around space-x-4">
             <div className="min-w-96">
               <UrlInput

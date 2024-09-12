@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
   const t = useTranslations('Auth')
   return (
-    <main className="flex flex-col items-center justify-between p-4 mb-20">
+    <main className="flex flex-col items-center justify-between p-4 mb-20 pt-16 h-[75vh]">
         <nav className='self-end pr-[80px]'>
           <ul className="flex justify-around gap-10">
             <li>

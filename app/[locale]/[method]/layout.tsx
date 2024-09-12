@@ -10,8 +10,8 @@ export default function RootLayout({
 }>) {
   const t = useTranslations('Nav');
   return (
-    <div className="flex flex-col items-center justify-between p-4">
-      <div className="flex gap-10 justify-end">
+    <main className="flex flex-col items-center justify-between p-4  pt-16 h-[82vh]">
+      <div className="flex gap-10 justify-end fixed bg-white p-4 border-2 rounded-md w-full">
         <nav>
           <ul className="flex justify-around gap-10">
             <li>
@@ -31,6 +31,6 @@ export default function RootLayout({
         <ButtonLogout />
       </div>
       {children}
-    </div>
+    </main>
   );
 }

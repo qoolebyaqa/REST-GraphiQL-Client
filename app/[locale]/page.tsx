@@ -7,7 +7,7 @@ export default function Home() {
   
   const t = useTranslations('Main');
   return (
-    <main className="flex h-[55vh] flex-col items-center justify-between px-24">
+    <main className="flex h-[80vh] flex-col items-center justify-between px-24 pt-36">
       <div className="w-full max-w-5xl items-center flex-col gap-40 justify-between font-mono text-sm lg:flex">
         <div className='flex gap-20'>
         <GetStarted />

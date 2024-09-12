@@ -17,7 +17,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang={locale}>
-      <body className={`${inter.className} mt-4`}>        
+      <body className={`${inter.className}`}>        
         {children}
       </body>
     </html>

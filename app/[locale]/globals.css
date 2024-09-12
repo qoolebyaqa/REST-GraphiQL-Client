@@ -90,12 +90,13 @@ body {
 
 
 .ekg__svg {
-  height: 250px;
+  height: 60px;
+  width: 1440px;
   margin:0 -1.7rem;
 }
 .ekg {
   opacity:1;
   stroke-dasharray: 600;
   stroke-dashoffset :1200;
-  animation: dash 3.5s linear forwards infinite, fade 3.5s linear infinite;
+  animation: dash 5.5s linear forwards infinite, fade 5.5s linear infinite;
 }

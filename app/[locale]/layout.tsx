@@ -14,7 +14,7 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
       <NextIntlClientProvider messages={messages}>
-        <header className='flex gap-6 items-center'>
+        <header className='flex gap-6 items-center fixed bg-white w-full'>
         <svg
           version="1.1"
           id="Layer_1"
@@ -32,9 +32,9 @@ export default async function RootLayout({
             strokeWidth="1"
             strokeLinecap="square"
             strokeMiterlimit="14"
-            points="-465.4,281 
+            points="-885.4,281 
 	-436,281 -435.3,280.6 -431.5,275.2 -426.9,281 -418.9,281 -423.9,281 -363.2,281 -355.2,269 -345.2,303 -335.2,263 -325.2,291 
-	-319.2,281 -187.2,281 "
+	-319.2,281 256.2,281 "
           />
         </svg> 
         <h2 className="text-center text-2xl pr-6 pb-[35px]">
