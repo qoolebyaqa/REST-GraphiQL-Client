@@ -1,20 +1,34 @@
-import { useTranslations } from "next-intl";
+import { updateUrl } from '@/utils/updateUrl';
+import { useTranslations } from 'next-intl';
 
 interface UrlInputProps {
   method: string;
   url: string;
+  headers: [string, string][];
+  requestBody: string;
+  locale: string;
   setUrl: (url: string) => void;
   setSdlUrl?: (sdlUrl: string) => void;
 }
 
-const UrlInput = ({ method, url, setUrl, setSdlUrl }: UrlInputProps) => {
-  const t = useTranslations('Rest')
+const UrlInput = ({
+  method,
+  url,
+  headers,
+  requestBody,
+  locale,
+  setUrl,
+  setSdlUrl,
+}: UrlInputProps) => {
+  const t = useTranslations('Rest');
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newUrl = e.target.value;
     setUrl(newUrl);
-    if (method === 'POST' && setSdlUrl) {
+    if (setSdlUrl) {
+      method = 'GRAPHQL';
       setSdlUrl(`${e.target.value}?sdl`);
     }
+    updateUrl(locale, method, newUrl, headers, requestBody);
   };
 
   return (

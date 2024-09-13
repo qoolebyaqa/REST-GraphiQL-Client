@@ -35,6 +35,7 @@ async function handleRequest(
   request?: NextRequest
 ) {
   const decodedUrl = base64.decode(params.url);
+  console.log(decodedUrl);
   const decodedBody = params.body ? base64.decode(params.body) : undefined;
 
   const headers: HeadersInit = {};

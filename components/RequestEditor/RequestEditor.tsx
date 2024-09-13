@@ -8,6 +8,7 @@ type RequestEditorProps = {
   url: string;
   headers: [string, string][];
   requestBody: string;
+  locale: string;
   setRequestBody: (requestBody: string) => void;
   isGraphQL?: boolean;
 };
@@ -17,6 +18,7 @@ const RequestEditor = ({
   url,
   headers,
   requestBody,
+  locale,
   setRequestBody,
   isGraphQL = false,
 }: RequestEditorProps) => {
@@ -28,7 +30,7 @@ const RequestEditor = ({
 
   const focusOutEvent = (e: React.FocusEvent<HTMLTextAreaElement>) => {
     const newRequestBody = e.target.value;
-    updateUrl(method, url, headers, newRequestBody);
+    updateUrl(locale, method, url, headers, newRequestBody);
   };
 
   const prettifyRequestBody = async () => {
@@ -45,7 +47,6 @@ const RequestEditor = ({
         setRequestBody(JSON.stringify(parsed, null, 4));
       }
     } catch (e) {
-      console.log(e);
       alert(isGraphQL ? 'Invalid GraphQL query' : 'Invalid JSON');
     }
   };
@@ -59,8 +60,7 @@ const RequestEditor = ({
         value={requestBody}
         onChange={handleBodyChange}
         onBlur={focusOutEvent}
-        placeholder={`${t('bodyph')}${isGraphQL ? '(GraphQL)' : '(JSON)'}
-        `}
+        placeholder={`${t('bodyph')}${isGraphQL ? '(GraphQL)' : '(JSON)'}. ${t('bodyvar')}`}
         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3"
         rows={10}
       ></textarea>

@@ -8,6 +8,8 @@ type HeadersEditorProps = {
   method: string;
   url: string;
   requestBody: string;
+  locale: string;
+  isGraphQL?: boolean;
 };
 
 const HeadersEditor = ({
@@ -16,6 +18,8 @@ const HeadersEditor = ({
   method,
   url,
   requestBody,
+  locale,
+  isGraphQL,
 }: HeadersEditorProps) => {
   const [headerKey, setHeaderKey] = useState('');
   const [headerValue, setHeaderValue] = useState('');
@@ -32,15 +36,19 @@ const HeadersEditor = ({
     if (key && value) {
       const newHeaders: [string, string][] = [...headers, [key, value]];
       setHeaders(newHeaders);
-      updateUrl(method, url, newHeaders, requestBody);
+      updateUrl(locale, method, url, newHeaders, requestBody);
     }
     setHeaderKey('');
     setHeaderValue('');
   };
 
   const clearHeaders = () => {
-    setHeaders([]);
-    updateUrl(method, url, [], requestBody);
+    if (isGraphQL) {
+      setHeaders([['Content-Type', 'application/json']]);
+    } else {
+      setHeaders([]);
+    }
+    updateUrl(locale, method, url, [], requestBody);
   };
 
   return (

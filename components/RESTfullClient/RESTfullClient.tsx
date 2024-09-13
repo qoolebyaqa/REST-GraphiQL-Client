@@ -13,18 +13,20 @@ import UrlInput from '../UrlInput/UrlInput';
 import { updateUrl } from '@/utils/updateUrl';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import { replaceVariablesInRequestBody } from '@/utils/replaceVaribles';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
   encodedUrl?: string;
   encodedBody?: string;
+  locale: string;
 };
 
 export default function RESTfullClient({ params }: { params: Params }) {
   const [method, setMethod] = useState<string>(params.method || 'GET');
   const [url, setUrl] = useState<string>('');
   const [requestBody, setRequestBody] = useState<string>('');
+  const locale = params.locale;
   const [headers, setHeaders] = useState<[string, string][]>([]);
   const [variables, setVariables] = useState<[string, string][]>([]);
   const [responseBody, setResponseBody] = useState<object | null>(null);
@@ -34,8 +36,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
 
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
-  const locale = useLocale();
-  const t = useTranslations('Rest')
+  const t = useTranslations('Rest');
 
   async function checkUser() {
     setLoadingState(true);
@@ -75,7 +76,9 @@ export default function RESTfullClient({ params }: { params: Params }) {
     setUrl('');
     setRequestBody('');
     setHeaders([]);
-    updateUrl(`${locale}/${e.target.value}`, '', [], '');
+    setResponseBody(null);
+    setHttpCode(null);
+    updateUrl(locale, newMethod, '', [], '');
   };
 
   const handleSubmit = async () => {
@@ -116,7 +119,6 @@ export default function RESTfullClient({ params }: { params: Params }) {
       const data = await response.json();
       setResponseBody(data);
     } catch (error: unknown) {
-      console.error('Error:', error);
       if (error instanceof Error) {
         setErrorMessage(error.message || t('unknownERR'));
       } else {
@@ -151,7 +153,14 @@ export default function RESTfullClient({ params }: { params: Params }) {
               </select>
             </div>
 
-            <UrlInput method={method} url={url} setUrl={setUrl} />
+            <UrlInput
+              method={method}
+              url={url}
+              headers={headers}
+              requestBody={requestBody}
+              locale={locale}
+              setUrl={setUrl}
+            />
           </div>
 
           <HeadersEditor
@@ -159,6 +168,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
             setHeaders={setHeaders}
             method={method}
             url={url}
+            locale={locale}
             requestBody={requestBody}
           />
 
@@ -174,6 +184,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
               method={method}
               url={url}
               headers={headers}
+              locale={locale}
               requestBody={requestBody}
               setRequestBody={setRequestBody}
             />
