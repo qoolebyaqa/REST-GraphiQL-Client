@@ -78,12 +78,14 @@ const VariablesEditor = ({ variables, setVariables }: VariablesEditorProps) => {
               </label>
             </div>
             <button
+              data-testid="add-variables"
               onClick={() => addVariables(variableKey, variableValue)}
               className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
             >
               {t('addVar')}
             </button>
             <button
+              data-testid="clear-variables"
               onClick={clearVariables}
               className="mt-2 ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
             >
