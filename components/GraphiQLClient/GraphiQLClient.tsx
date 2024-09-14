@@ -52,7 +52,15 @@ export default function GraphiQLClient({ params }: { params: Params }) {
 
   useEffect(() => {
     checkUser();
-    if (params.encodedUrl) {
+    const lastRequest = localStorage.getItem('lastRequest');
+    if (lastRequest) {
+      try {
+        const decodedUrl = base64.decode(lastRequest);
+        setUrl(decodedUrl);
+      } catch (error) {
+        console.error('Failed to decode last request URL:', error);
+      }
+    } else if (params.encodedUrl) {
       try {
         const decodedUrl = base64.decode(params.encodedUrl);
         setUrl(decodedUrl);
@@ -85,6 +93,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
       if (data.data) {
         const clientSchema = buildClientSchema(data.data);
         setSchema(clientSchema);
+        setErrorMessage('');
       } else {
         setErrorMessage(t('fail'));
       }
@@ -123,6 +132,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
 
       setHttpCode(response.status);
       const data = await response.json();
+      localStorage.setItem('lastRequest', apiUrl);
       setResponseBody(data);
     } catch (error) {
       if (error instanceof Error) {

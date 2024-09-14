@@ -7,7 +7,6 @@ export const updateUrl = (
   newHeaders: [string, string][],
   newRequestBody: string
 ) => {
-  console.log(newMethod);
   const encodedUrl = newUrl ? base64.encode(newUrl) : '';
   const encodedBody =
     newMethod && newMethod !== 'GET' ? base64.encode(newRequestBody || '') : '';
