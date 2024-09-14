@@ -1,13 +1,43 @@
 import GetStarted from '@/components/GetStarted';
 import LangSwitcher from '@/components/LangSwitcher';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 export default function Home() {
-  
+  const locale = useLocale();
   const t = useTranslations('Main');
   return (
-    <main className="flex h-[55vh] flex-col items-center justify-between px-24">
+    <main className="flex flex-col items-center justify-between px-24 pt-10 mb-40">      
+      <div className="flex gap-6 items-center w-full text-white">
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="-466.4 259.6 280.2 47.3"
+          enableBackground="new -466.4 259.6 280.2 47.3"
+          xmlSpace="preserve"
+          className="ekg__svg"
+          width="1440px"
+        >
+          <polyline
+            fill="none"
+            stroke="#4289A3"
+            className="ekg"
+            strokeWidth="1"
+            strokeLinecap="square"
+            strokeMiterlimit="14"
+            points="-905.4,281 
+-436,281 -435.3,280.6 -431.5,275.2 -426.9,281 -418.9,281 -423.9,281 -363.2,281 -355.2,269 -345.2,303 -335.2,263 -325.2,291 
+-319.2,281 256.2,281 "
+          />
+        </svg>
+        <h2 className="text-center text-2xl pr-6 pb-[35px]">
+          {locale === 'en'
+            ? 'Rest-Graphiql-Client playground'
+            : 'Платформа - Rest-Graphiql-Client'}
+        </h2>
+      </div>
       <div className="w-full max-w-5xl items-center flex-col gap-40 justify-between font-mono text-sm lg:flex">
         <div className='flex gap-20'>
         <GetStarted />

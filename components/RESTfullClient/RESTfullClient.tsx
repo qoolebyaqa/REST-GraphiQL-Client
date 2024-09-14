@@ -132,7 +132,7 @@ export default function RESTfullClient({ params }: { params: Params }) {
       {loadingState ? (
         <Loader />
       ) : (
-        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg  pt-32">
           <div className="flex space-x-4">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
