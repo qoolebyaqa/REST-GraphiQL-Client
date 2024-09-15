@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 60%;
+  padding: 0 30px;
+}
+.footer li {
+  display: flex;
+  align-items: center;
+}
+.footer a {
+  display: flex;
+  align-items: center;
+}
+
+.error {
+  font-size: 12px;
+  animation: ErrorReveal 0.4s ease-in-out;
+  transition: 0.4s;
+}
+
+@keyframes ErrorReveal {
+  0% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .footer {
+    padding: 0 2px;
+    font-size: 0.7rem;
+  }
+  .footer ul {
+    gap: 10px;
+    margin-left: 20px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .footer {
+    margin-top: 0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1200;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+}
+
+.ekg__svg {
+  height: 60px;
+  margin: 0 -1.7rem;
+}
+.ekg {
+  opacity: 1;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 1200;
+  animation:
+    dash 5.5s linear forwards infinite,
+    fade 5.5s linear infinite;
+}

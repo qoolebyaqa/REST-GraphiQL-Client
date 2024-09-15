@@ -1,2 +1,8 @@
 # REST-GraphiQL-Client
-Study-project
+
+Study project.
+
+Team Aktimel:
+
+1. Artur Ten
+2. Petr Markin
