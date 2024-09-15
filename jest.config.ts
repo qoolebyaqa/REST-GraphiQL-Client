@@ -15,9 +15,12 @@ const config: Config = {
     'app/**/*.{js,ts,jsx,tsx}',
     'components/**/*.{js,ts,jsx,tsx}',
   ],
-  coveragePathIgnorePatterns: ['/node_modules/', 'app/_app.tsx'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/app/_app.tsx'],
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'html', 'text'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1'
+ }
 };
 
 export default createJestConfig(config);

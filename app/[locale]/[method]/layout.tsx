@@ -4,7 +4,7 @@ import LangSwitcher from '@/components/LangSwitcher';
 import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
-export default function RootLayout({
+export default function MethodLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

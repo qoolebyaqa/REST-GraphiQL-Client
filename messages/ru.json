@@ -22,7 +22,7 @@
     "loading": "Загрузка...",
     "LogInTitle": "Вход в систему",
     "LoginHint": "Введите данные вашего аккаунта",
-    "NameLabel": "Логин",
+    "NameLabel": "Email",
     "PassLabel": "Пароль",
     "GoToSignUp": "Нет аккаунта?",
     "LoginSubmit": "Войти",

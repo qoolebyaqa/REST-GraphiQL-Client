@@ -22,7 +22,7 @@
     "loading": "Loading...",
     "LogInTitle": "Log in to Playground",
     "LoginHint": "Enter to your account",
-    "NameLabel": "Username",
+    "NameLabel": "User email",
     "PassLabel": "Password",
     "GoToSignUp": "Need to Register?",
     "LoginSubmit": "Log in",
