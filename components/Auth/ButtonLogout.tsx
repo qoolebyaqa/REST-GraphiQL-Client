@@ -10,7 +10,7 @@ function ButtonLogout() {
     signOut(auth);
     router.push('/');
   }
-  const t = useTranslations('Auth')
+  const t = useTranslations('Auth');
 
   return (
     <button

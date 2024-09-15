@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 function GetStarted() {
   const [authState, setAuthState] = useState<User | null>(null);
-  const t = useTranslations('Main')
+  const t = useTranslations('Main');
   useEffect(() => {
     onAuthStateChanged(auth, (data: User | null) => {
       setAuthState(data);

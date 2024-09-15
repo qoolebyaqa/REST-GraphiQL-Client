@@ -21,7 +21,7 @@ jest.mock('@/navigation', () => ({
 
 describe('LangSwitcher Component', () => {
   const pushMock = jest.fn();
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
     (useLocale as jest.Mock).mockReturnValue('en'); // Устанавливаем дефолтное значение
@@ -30,7 +30,7 @@ describe('LangSwitcher Component', () => {
 
   it('should render the select element with the correct default value', () => {
     render(<LangSwitcher />);
-    
+
     const selectElement = screen.getByRole('combobox');
     expect(selectElement).toHaveValue('en');
   });
@@ -39,11 +39,11 @@ describe('LangSwitcher Component', () => {
     (usePathname as jest.Mock).mockReturnValue('/en/some/path'); // Мокаем текущий путь
 
     render(<LangSwitcher />);
-    
+
     const selectElement = screen.getByRole('combobox');
-    
+
     fireEvent.change(selectElement, { target: { value: 'ru' } });
-    
+
     expect(pushMock).toHaveBeenCalledWith('/some/path', { locale: 'ru' });
   });
 
@@ -51,11 +51,11 @@ describe('LangSwitcher Component', () => {
     (usePathname as jest.Mock).mockReturnValue('/some/other/path'); // Мокаем путь, не включающий "en/" или "ru/"
 
     render(<LangSwitcher />);
-    
+
     const selectElement = screen.getByRole('combobox');
-    
+
     fireEvent.change(selectElement, { target: { value: 'ru' } });
-    
+
     expect(pushMock).toHaveBeenCalledWith('/', { locale: 'ru' });
   });
 });

@@ -12,7 +12,9 @@ describe('Header', () => {
   });
 
   it('should render Header', () => {
-    expect(screen.getByText('Платформа - Rest-Graphiql-Client')).toBeInTheDocument();
+    expect(
+      screen.getByText('Платформа - Rest-Graphiql-Client')
+    ).toBeInTheDocument();
   });
 
   it('should render SVG icon', () => {

@@ -5,23 +5,22 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Rest-graphiql-client',
-  description: 'RSSchool study project',icons: {
+  description: 'RSSchool study project',
+  icons: {
     icon: '/favicon.ico',
   },
 };
 
 export default async function RootLayout({
   children,
-  params: { locale }
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
-  params: {locale: string}
+  params: { locale: string };
 }>) {
   return (
     <html lang={locale}>
-      <body className={`${inter.className}`}>        
-        {children}
-      </body>
+      <body className={`${inter.className}`}>{children}</body>
     </html>
   );
 }

@@ -1,10 +1,10 @@
-import MethodLayout from "@/app/[locale]/[method]/layout";
-import RootLayout from "@/app/[locale]/auth/layout";
-import Auth from "@/app/[locale]/auth/page";
-import SignIn from "@/app/[locale]/auth/signin/page";
-import NotFound from "@/app/[locale]/not-found";
-import Home from "@/app/[locale]/page";
-import { render, screen } from "@testing-library/react";
+import MethodLayout from '@/app/[locale]/[method]/layout';
+import RootLayout from '@/app/[locale]/auth/layout';
+import Auth from '@/app/[locale]/auth/page';
+import SignIn from '@/app/[locale]/auth/signin/page';
+import NotFound from '@/app/[locale]/not-found';
+import Home from '@/app/[locale]/page';
+import { render, screen } from '@testing-library/react';
 
 jest.mock('next-intl', () => ({
   useLocale: () => () => 'en',
@@ -13,7 +13,7 @@ jest.mock('next-intl', () => ({
     <a href={href} className={className}>
       {children}
     </a>
-  ))
+  )),
 }));
 jest.mock('@/navigation');
 
@@ -29,12 +29,11 @@ describe('Home page', () => {
   });
 
   it('should render SVG ekg', () => {
-    const svgElement = screen.getByTestId('svgEKG')
+    const svgElement = screen.getByTestId('svgEKG');
     expect(svgElement).toBeInTheDocument();
     expect(svgElement).toHaveAttribute('viewBox', '-466.4 259.6 280.2 47.3');
   });
 });
-
 
 describe('Auth Page', () => {
   beforeEach(() => {
@@ -79,24 +78,36 @@ describe('Not found page', () => {
 
 describe('Root Layout', () => {
   beforeEach(() => {
-    render(<RootLayout><p>Children</p></RootLayout>);
+    render(
+      <RootLayout>
+        <p>Children</p>
+      </RootLayout>
+    );
   });
 
   it('should render Root Layout', () => {
     expect(screen.getByText('RU')).toBeInTheDocument();
     expect(screen.getByText('RU')).toBeInTheDocument();
-    expect(screen.getByText('Платформа - Rest-Graphiql-Client')).toBeInTheDocument();
+    expect(
+      screen.getByText('Платформа - Rest-Graphiql-Client')
+    ).toBeInTheDocument();
   });
 });
 
 describe('Method Layout', () => {
   beforeEach(() => {
-    render(<MethodLayout><p>Children</p></MethodLayout>);
+    render(
+      <MethodLayout>
+        <p>Children</p>
+      </MethodLayout>
+    );
   });
 
   it('should render Method Layout', () => {
     expect(screen.getByText('RU')).toBeInTheDocument();
     expect(screen.getByText('RU')).toBeInTheDocument();
-    expect(screen.getByText('Платформа - Rest-Graphiql-Client')).toBeInTheDocument();
+    expect(
+      screen.getByText('Платформа - Rest-Graphiql-Client')
+    ).toBeInTheDocument();
   });
 });

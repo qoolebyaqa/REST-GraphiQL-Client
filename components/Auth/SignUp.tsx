@@ -26,12 +26,12 @@ export default function SignUp() {
   }, [authState]);
 
   async function checkUser() {
-    if(!authState) {
+    if (!authState) {
       setLoading(true);
       onAuthStateChanged(auth, (data: User | null) => {
         setAuthState(data);
       });
-      setLoading(false); 
+      setLoading(false);
     } else {
       router.push('/GET');
     }
@@ -55,8 +55,8 @@ export default function SignUp() {
       setLoading(false);
     }
   }
-  if(loading) {
-    return <p>{t('loading')}</p>
+  if (loading) {
+    return <p>{t('loading')}</p>;
   }
   return (
     <form
@@ -64,7 +64,7 @@ export default function SignUp() {
       onSubmit={logIn}
     >
       <h2 className="text-sm sm:text-xl md:text-2xl font-bold">
-      {t('LogInTitle')}
+        {t('LogInTitle')}
       </h2>
       {infoMsg && <p className="text-2xl text-amber-400 error">{infoMsg}</p>}
       <p className="text-sm md:text-base">{t('LoginHint')}</p>
@@ -79,7 +79,7 @@ export default function SignUp() {
             setUser({ ...user, login: e.target.value });
           }}
           value={user.login}
-          data-testid='logName'
+          data-testid="logName"
         />
       </div>
       <div className="flex flex-col">
@@ -93,11 +93,11 @@ export default function SignUp() {
             setUser({ ...user, password: e.target.value });
           }}
           value={user.password}
-          data-testid='logPass'
+          data-testid="logPass"
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">
-        <Link href='/auth'>
+        <Link href="/auth">
           <button type="button" disabled={loading}>
             {t('GoToSignUp')}
           </button>
@@ -105,7 +105,7 @@ export default function SignUp() {
         <button
           type="submit"
           className="bg-cyan-600 rounded-lg sm:w-40 w-1/2 border-2 border-black text-black h-8 md:h-10 disabled:bg-sky-300"
-          disabled={loading || (user.login ==='' || user.password === '')}
+          disabled={loading || user.login === '' || user.password === ''}
         >
           {t('LoginSubmit')}
         </button>

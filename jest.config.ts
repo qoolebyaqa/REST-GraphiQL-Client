@@ -19,8 +19,8 @@ const config: Config = {
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'html', 'text'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1'
- }
+    '^@/(.*)$': '<rootDir>/$1',
+  },
 };
 
 export default createJestConfig(config);

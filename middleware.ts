@@ -19,6 +19,6 @@ export const config = {
     '/auth/signin',
     '/GRAPHQL',
     '/(en|ru)/:path*',
-    "/((?!|_next/static|_next/image|img/|favicon.ico).*)",
+    '/((?!|_next/static|_next/image|img/|favicon.ico).*)',
   ],
 };
