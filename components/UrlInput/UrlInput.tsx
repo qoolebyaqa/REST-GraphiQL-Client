@@ -37,6 +37,7 @@ const UrlInput = ({
         URL:
       </label>
       <input
+        data-testid="url-input"
         type="text"
         value={url}
         onChange={handleUrlChange}

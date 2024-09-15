@@ -25,7 +25,14 @@ export default function Footer() {
         location={t('DmitryLocation')}
       />
       <div className="flex justify-end mt-2 items-center gap-4">
-        <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg" width='40px' height='40px'>
+        <svg
+          data-testid="footer-svg"
+          viewBox="0 0 64 64"
+          fill="white"
+          xmlns="http://www.w3.org/2000/svg"
+          width="40px"
+          height="40px"
+        >
           <g clipPath="url(#clip0_5701_38384)">
             <circle cx="32" cy="32" r="32" fill="black" />
             <path
@@ -45,7 +52,13 @@ export default function Footer() {
             </clipPath>
           </defs>
         </svg>
-        <Link href='https://rs.school/courses/reactjs' target='_blank' className='hover:text-cyan-600 transition-all duration-300'>©2024 The Rolling Scopes (React 2024Q3)</Link>
+        <Link
+          href="https://rs.school/courses/reactjs"
+          target="_blank"
+          className="hover:text-cyan-600 transition-all duration-300"
+        >
+          ©2024 The Rolling Scopes (React 2024Q3)
+        </Link>
       </div>
     </footer>
   );

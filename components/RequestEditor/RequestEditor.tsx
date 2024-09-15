@@ -60,6 +60,7 @@ const RequestEditor = ({
         {t('reqBody')}
       </label>
       <textarea
+        data-testid="reqBody"
         value={requestBody}
         onChange={handleBodyChange}
         onBlur={focusOutEvent}
@@ -69,6 +70,7 @@ const RequestEditor = ({
       ></textarea>
       <div className="flex flex-row space-x-4">
         <button
+          data-testid="prettify"
           onClick={prettifyRequestBody}
           className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
         >

@@ -7,11 +7,11 @@ jest.mock('base-64', () => ({
 
 describe('updateUrl', () => {
   beforeEach(() => {
-    global.window.history.replaceState = jest.fn(); // Мокаем replaceState
+    global.window.history.replaceState = jest.fn();
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Очищаем моки после каждого теста
+    jest.clearAllMocks();
   });
 
   test('updates URL with encoded method, URL, and body', () => {
