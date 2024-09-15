@@ -1,7 +1,7 @@
 import SignUp from "@/components/Auth/SignUp";
 import { useTranslations } from "next-intl";
 
-export default function Home() {
+export default function SignIn() {
   const t = useTranslations('Auth')
   return (
     <>

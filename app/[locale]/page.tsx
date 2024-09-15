@@ -10,6 +10,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-between px-24 pt-10 mb-40">      
       <div className="flex gap-6 items-center w-full text-white">
         <svg
+          data-testid='svgEKG'
           version="1.1"
           id="Layer_1"
           xmlns="http://www.w3.org/2000/svg"

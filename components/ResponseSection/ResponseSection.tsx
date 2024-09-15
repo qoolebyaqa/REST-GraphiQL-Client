@@ -33,7 +33,10 @@ const ResponseSecion: FC<ResponseProps> = ({
 
       {responseBody && (
         <div className="mt-4">
-          <pre className="mt-2 bg-gray-100 dark:bg-gray-700 p-4 rounded text-gray-900 dark:text-gray-100 overflow-scroll max-h-96">
+          <pre
+            data-testid="response"
+            className="mt-2 bg-gray-100 dark:bg-gray-700 p-4 rounded text-gray-900 dark:text-gray-100 overflow-scroll max-h-96"
+          >
             {JSON.stringify(responseBody, null, 4)}
           </pre>
         </div>

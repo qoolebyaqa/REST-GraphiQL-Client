@@ -79,6 +79,7 @@ export default function SignUp() {
             setUser({ ...user, login: e.target.value });
           }}
           value={user.login}
+          data-testid='logName'
         />
       </div>
       <div className="flex flex-col">
@@ -92,6 +93,7 @@ export default function SignUp() {
             setUser({ ...user, password: e.target.value });
           }}
           value={user.password}
+          data-testid='logPass'
         />
       </div>
       <div className="flex sm:gap-5 gap-2 m-auto md:text-base sm:text-sm text-xs">

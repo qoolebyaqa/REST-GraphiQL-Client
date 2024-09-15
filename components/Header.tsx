@@ -4,6 +4,7 @@ function Header() {
   const locale = useLocale();
   return ( <header className='flex gap-6 items-center bg-slate-300 text-zinc-900'>
         <svg
+          data-testid='svgEKG'
           version="1.1"
           id="Layer_1"
           xmlns="http://www.w3.org/2000/svg"

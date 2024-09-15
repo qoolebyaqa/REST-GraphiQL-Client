@@ -5,7 +5,9 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Rest-graphiql-client',
-  description: 'RSSchool study project',
+  description: 'RSSchool study project',icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default async function RootLayout({

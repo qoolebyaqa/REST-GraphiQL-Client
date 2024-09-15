@@ -22,6 +22,27 @@ export async function PUT(
   return handleRequest(params, 'PUT', request);
 }
 
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { method: string; url: string; body?: string } }
+) {
+  return handleRequest(params, 'PATCH', request);
+}
+
+export async function OPTIONS(
+  request: NextRequest,
+  { params }: { params: { method: string; url: string; body?: string } }
+) {
+  return handleRequest(params, 'OPTIONS', request);
+}
+
+export async function HEAD(
+  request: NextRequest,
+  { params }: { params: { method: string; url: string; body?: string } }
+) {
+  return handleRequest(params, 'HEAD', request);
+}
+
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { method: string; url: string; body?: string } }
@@ -86,7 +107,6 @@ async function handleRequest(
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Error in fetching:', error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }

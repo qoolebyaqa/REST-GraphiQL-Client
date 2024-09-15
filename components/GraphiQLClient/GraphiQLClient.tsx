@@ -10,16 +10,19 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import VariablesEditor from '../VariablesEditor/VariablesEditor';
 import RequestEditor from '../RequestEditor/RequestEditor';
 import UrlInput from '../UrlInput/UrlInput';
-import { useLocale, useTranslations } from 'next-intl';
+import { replaceVariablesInRequestBody } from '@/utils/replaceVaribles';
+import { useTranslations } from 'next-intl';
 
 type Params = {
   method: string;
   encodedUrl?: string;
   encodedBody?: string;
+  locale: string;
 };
 
 export default function GraphiQLClient({ params }: { params: Params }) {
   const [url, setUrl] = useState<string>('');
+  const locale = params.locale;
   const [sdlUrl, setSdlUrl] = useState<string>('');
   const [requestBody, setRequestBody] = useState<string>('');
   const [variables, setVariables] = useState<[string, string][]>([]);
@@ -32,8 +35,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
   const [schema, setSchema] = useState<object | null>(null);
 
   const router = useRouter();
-  const locale = useLocale();
-  const t = useTranslations('Rest')
+  const t = useTranslations('Rest');
   const [authState, setAuthState] = useState<User | null>(null);
   const [loadingState, setLoadingState] = useState(true);
 
@@ -50,7 +52,15 @@ export default function GraphiQLClient({ params }: { params: Params }) {
 
   useEffect(() => {
     checkUser();
-    if (params.encodedUrl) {
+    const lastRequest = localStorage.getItem('lastRequest');
+    if (lastRequest) {
+      try {
+        const decodedUrl = base64.decode(lastRequest);
+        setUrl(decodedUrl);
+      } catch (error) {
+        console.error('Failed to decode last request URL:', error);
+      }
+    } else if (params.encodedUrl) {
       try {
         const decodedUrl = base64.decode(params.encodedUrl);
         setUrl(decodedUrl);
@@ -83,27 +93,13 @@ export default function GraphiQLClient({ params }: { params: Params }) {
       if (data.data) {
         const clientSchema = buildClientSchema(data.data);
         setSchema(clientSchema);
+        setErrorMessage('');
       } else {
         setErrorMessage(t('fail'));
       }
     } catch (error) {
-      console.error('Failed to fetch schema:', error);
       setErrorMessage(t('fetchingERR'));
     }
-  };
-
-  const replaceVariablesInRequestBody = (
-    body: string,
-    variables: [string, string][]
-  ) => {
-    let processedBody = body;
-
-    variables.forEach(([key, value]) => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
-      processedBody = processedBody.replace(regex, value);
-    });
-
-    return processedBody;
   };
 
   const handleSubmit = async () => {
@@ -118,6 +114,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
 
       const encodedUrl = base64.encode(url);
       const encodedBody = base64.encode(processedBody);
+
       const queryParams = headers
         .map(
           ([key, value]) =>
@@ -126,9 +123,8 @@ export default function GraphiQLClient({ params }: { params: Params }) {
         .join('&');
 
       const apiUrl = `/${locale}/GRAPHQL/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryParams ? `?${queryParams}` : ''}`;
-      window.history.replaceState(null, '', apiUrl);
 
-      console.log('API URL:', apiUrl);
+      window.history.replaceState(null, '', apiUrl);
 
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -136,10 +132,14 @@ export default function GraphiQLClient({ params }: { params: Params }) {
 
       setHttpCode(response.status);
       const data = await response.json();
+      localStorage.setItem('lastRequest', apiUrl);
       setResponseBody(data);
     } catch (error) {
-      console.error('Error:', error);
-      setErrorMessage('An unknown error occurred');
+      if (error instanceof Error) {
+        setErrorMessage(error.message || t('unknownERR'));
+      } else {
+        setErrorMessage(t('unknownERR'));
+      }
     }
   };
 
@@ -148,12 +148,15 @@ export default function GraphiQLClient({ params }: { params: Params }) {
       {loadingState ? (
         <Loader />
       ) : (
-        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg pt-32">
+        <div className="container mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg pt-32 mt-[150px]">
           <div className="flex flex-row justify-around space-x-4">
             <div className="min-w-96">
               <UrlInput
                 method={'POST'}
                 url={url}
+                headers={headers}
+                requestBody={requestBody}
+                locale={locale}
                 setUrl={setUrl}
                 setSdlUrl={setSdlUrl}
               />
@@ -183,7 +186,9 @@ export default function GraphiQLClient({ params }: { params: Params }) {
                 setHeaders={setHeaders}
                 method={'POST'}
                 url={url}
+                locale={locale}
                 requestBody={requestBody}
+                isGraphQL={true}
               />
 
               <VariablesEditor
@@ -196,6 +201,7 @@ export default function GraphiQLClient({ params }: { params: Params }) {
                 url={url}
                 headers={headers}
                 requestBody={requestBody}
+                locale={locale}
                 setRequestBody={setRequestBody}
                 isGraphQL={true}
               />
